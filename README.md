@@ -15,21 +15,17 @@
 
 ## نحوه استفاده:
 1. مخزن را کلون کنید.
-   \`\`\`bash
+   ```bash
    git clone https://github.com/your-username/Finglish-Farsi-Translator.git
-   \`\`\`
+   ```
 2. به دایرکتوری پروژه بروید.
-   \`\`\`bash
+   ```bash
    cd Finglish-Farsi-Translator
-   \`\`\`
-3. کتابخانه‌های مورد نیاز را نصب کنید.
-   \`\`\`bash
-   pip install -r requirements.txt
-   \`\`\`
-4. برنامه را اجرا کنید.
-   \`\`\`bash
+   ```
+3. برنامه را اجرا کنید.
+   ```bash
    python finglish_to_farsi.py
-   \`\`\`
+   ```
 
 ## سازنده
 جهت ارائه پیشنهادات و یا مشکلات و تماس با سازنده این اسکریپت، از [روبیکا](https://rubika.ir/frameworkpython4) یا [تلگرام](https://t.me/Framework_Python) با من در ارتباط باشید.
