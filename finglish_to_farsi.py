@@ -2,6 +2,8 @@ import re
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
+import sys
+import argparse
 
 char_map = {
     'a': 'ا', 'A': 'آ', 'e': 'ع', 'E': 'اِ', 'i': 'ی', 'o': 'و', 
@@ -39,66 +41,83 @@ def Tashkhis_va_Tarjome(matn):
             result.append(segment)
     return ''.join(result)
 
-def translate():
-    input_text = input_box.get("1.0", tk.END).strip()
+def translate_terminal():
+    input_text = input("Enter text: ").strip()
     if input_text:
         result_text = Tashkhis_va_Tarjome(input_text)
+        print("Translated text:", result_text)
+
+def translate_gui():
+    def translate():
+        input_text = input_box.get("1.0", tk.END).strip()
+        if input_text:
+            result_text = Tashkhis_va_Tarjome(input_text)
+            output_box.config(state=tk.NORMAL)
+            output_box.delete("1.0", tk.END)
+            output_box.insert(tk.END, result_text)
+            output_box.config(state=tk.DISABLED)
+
+    def paste_text():
+        try:
+            clipboard_text = app.clipboard_get()
+            input_box.insert(tk.END, clipboard_text)
+        except tk.TclError:
+            messagebox.showerror("Error", "No text in clipboard")
+
+    def copy_text():
+        output_text = output_box.get("1.0", tk.END).strip()
+        if output_text:
+            app.clipboard_clear()
+            app.clipboard_append(output_text)
+            messagebox.showinfo("Success", "Text copied to clipboard")
+
+    def delete_text():
+        input_box.delete("1.0", tk.END)
         output_box.config(state=tk.NORMAL)
         output_box.delete("1.0", tk.END)
-        output_box.insert(tk.END, result_text)
         output_box.config(state=tk.DISABLED)
 
-def paste_text():
-    try:
-        clipboard_text = app.clipboard_get()
-        input_box.insert(tk.END, clipboard_text)
-    except tk.TclError:
-        messagebox.showerror("Error", "No text in clipboard")
+    app = tk.Tk()
+    app.title("Finglish/Farsi Translator")
 
-def copy_text():
-    output_text = output_box.get("1.0", tk.END).strip()
-    if output_text:
-        app.clipboard_clear()
-        app.clipboard_append(output_text)
-        messagebox.showinfo("Success", "Text copied to clipboard")
+    main_frame = ttk.Frame(app, padding="10")
+    main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
 
-def delete_text():
-    input_box.delete("1.0", tk.END)
-    output_box.config(state=tk.NORMAL)
-    output_box.delete("1.0", tk.END)
-    output_box.config(state=tk.DISABLED)
+    input_label = ttk.Label(main_frame, text="Enter text:")
+    input_label.grid(row=0, column=0, sticky=tk.W)
 
-app = tk.Tk()
-app.title("Finglish/Farsi Translator")
+    input_box = tk.Text(main_frame, height=10, width=50)
+    input_box.grid(row=1, column=0, columnspan=3, pady=5)
 
-main_frame = ttk.Frame(app, padding="10")
-main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
+    button_frame = ttk.Frame(main_frame)
+    button_frame.grid(row=2, column=0, columnspan=3, pady=5)
 
-input_label = ttk.Label(main_frame, text="Enter text:")
-input_label.grid(row=0, column=0, sticky=tk.W)
+    paste_button = ttk.Button(button_frame, text="Paste", command=paste_text)
+    paste_button.grid(row=0, column=0, padx=(0, 5))
 
-input_box = tk.Text(main_frame, height=10, width=50)
-input_box.grid(row=1, column=0, columnspan=3, pady=5)
+    translate_button = ttk.Button(button_frame, text="Translate", command=translate)
+    translate_button.grid(row=0, column=1, padx=(5, 5))
 
-button_frame = ttk.Frame(main_frame)
-button_frame.grid(row=2, column=0, columnspan=3, pady=5)
+    delete_button = ttk.Button(button_frame, text="Delete", command=delete_text)
+    delete_button.grid(row=0, column=2, padx=(5, 0))
 
-paste_button = ttk.Button(button_frame, text="Paste", command=paste_text)
-paste_button.grid(row=0, column=0, padx=(0, 5))
+    output_label = ttk.Label(main_frame, text="Translated text:")
+    output_label.grid(row=3, column=0, sticky=tk.W)
 
-translate_button = ttk.Button(button_frame, text="Translate", command=translate)
-translate_button.grid(row=0, column=1, padx=(5, 5))
+    output_box = tk.Text(main_frame, height=10, width=50, state=tk.DISABLED)
+    output_box.grid(row=4, column=0, columnspan=3, pady=5)
 
-delete_button = ttk.Button(button_frame, text="Delete", command=delete_text)
-delete_button.grid(row=0, column=2, padx=(5, 0))
+    copy_button = ttk.Button(main_frame, text="Copy", command=copy_text)
+    copy_button.grid(row=5, column=0, columnspan=3)
 
-output_label = ttk.Label(main_frame, text="Translated text:")
-output_label.grid(row=3, column=0, sticky=tk.W)
+    app.mainloop()
 
-output_box = tk.Text(main_frame, height=10, width=50, state=tk.DISABLED)
-output_box.grid(row=4, column=0, columnspan=3, pady=5)
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Finglish-Farsi Translator")
+    parser.add_argument('--mode', choices=['gui', 'terminal'], default='gui', help="Choose the mode of operation: gui or terminal")
+    args = parser.parse_args()
 
-copy_button = ttk.Button(main_frame, text="Copy", command=copy_text)
-copy_button.grid(row=5, column=0, columnspan=3)
-
-app.mainloop()
+    if args.mode == 'gui':
+        translate_gui()
+    else:
+        translate_terminal()
