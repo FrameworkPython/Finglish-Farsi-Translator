@@ -29,4 +29,4 @@
 
 ## سازنده
 جهت ارائه پیشنهادات و یا مشکلات و تماس با سازنده این اسکریپت، از [روبیکا](https://rubika.ir/frameworkpython4) یا [تلگرام](https://t.me/Framework_Python) با من در ارتباط باشید.
-" > README.md
+
