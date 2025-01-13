@@ -1,8 +1,4 @@
 import re
-import tkinter as tk
-from tkinter import ttk
-from tkinter import messagebox
-import sys
 import argparse
 
 char_map = {
@@ -42,12 +38,18 @@ def Tashkhis_va_Tarjome(matn):
     return ''.join(result)
 
 def translate_terminal():
-    input_text = input("Enter text: ").strip()
-    if input_text:
+    while True:
+        input_text = input("Enter text (type 'exit' to quit): ").strip()
+        if input_text.lower() == 'exit':
+            break
         result_text = Tashkhis_va_Tarjome(input_text)
         print("Translated text:", result_text)
 
 def translate_gui():
+    import tkinter as tk
+    from tkinter import ttk
+    from tkinter import messagebox
+
     def translate():
         input_text = input_box.get("1.0", tk.END).strip()
         if input_text:
