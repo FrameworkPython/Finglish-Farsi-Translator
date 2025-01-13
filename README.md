@@ -16,7 +16,7 @@
 ## نحوه استفاده:
 1. مخزن را کلون کنید.
    ```bash
-   git clone https://github.com/your-username/Finglish-Farsi-Translator.git
+   git clone https://github.com/FrameworkPython/Finglish-Farsi-Translator.git
    ```
 2. به دایرکتوری پروژه بروید.
    ```bash
